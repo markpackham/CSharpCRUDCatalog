@@ -10,10 +10,11 @@ namespace CSharpCRUDCatalog.Controllers
     [Route("items")]
     public class ItemsController : ControllerBase
     {
-         private readonly InMemItemsRepository repository;
+         private readonly IInMemItemsRepository repository;
 
-         public ItemsController(){
-             repository = new InMemItemsRepository();
+         public ItemsController(IInMemItemsRepository repository)
+        {
+             this.repository = repository;
          }
 
         // GET /items
