@@ -55,5 +55,28 @@ namespace CSharpCRUDCatalog.Controllers
 
             return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item.AsDto());
         }
+
+        // PUT /items/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
+        {
+            var exsitingItem = repository.GetItem(id);
+
+            if(exsitingItem is null)
+            {
+                return NotFound();
+            }
+
+            // "with" allows us to use a copy of an immutable type & modify it
+            Item updatedItem = exsitingItem with
+            {
+                Name = itemDto.Name,
+                Price = itemDto.Price,
+            };
+
+            repository.UpdateItem(updatedItem);
+
+            return NoContent();
+        }
     }
 }
