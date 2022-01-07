@@ -1,17 +1,22 @@
 using CSharpCRUDCatalog.Repositories;
 using CSharpCRUDCatalog.Settings;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(serviceProvier =>
 {
-    var settings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+    BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+    BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+
+    var settings = builder.Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
     return new MongoClient(settings.ConnectionString);
 });
-builder.Services.AddSingleton<IInMemItemsRepository, InMemItemsRepository>();
+builder.Services.AddSingleton<IInMemItemsRepository, MongoDbItemsRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
