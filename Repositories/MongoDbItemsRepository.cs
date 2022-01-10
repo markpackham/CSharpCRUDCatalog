@@ -1,4 +1,5 @@
 using CSharpCRUDCatalog.Entities;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace CSharpCRUDCatalog.Repositories
@@ -34,7 +35,7 @@ namespace CSharpCRUDCatalog.Repositories
 
         public IEnumerable<Item> GetItems()
         {
-            throw new NotImplementedException();
+            return itemsCollection.Find(new BsonDocument()).ToList();
         }
 
         public void UpdateItem(Item item)
