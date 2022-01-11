@@ -1,16 +1,18 @@
 ﻿using CSharpCRUDCatalog.Entities;
+using System.Threading.Tasks;
 
 namespace CSharpCRUDCatalog.Repositories
 {
     public interface IInMemItemsRepository
     {
-        Item GetItemAsync(Guid id);
-        IEnumerable<Item> GetItemsAsync();
+        Task<Item> GetItemAsync(Guid id);
 
-        void CreateItemAsync(Item item);
+        Task<IEnumerable<Item>> GetItemsAsync();
 
-        void UpdateItemAsync(Item item);
+        Task CreateItemAsync(Item item);
 
-        void DeleteItemAsync(Guid id);
+        Task UpdateItemAsync(Item item);
+
+        Task DeleteItemAsync(Guid id);
     }
 }
