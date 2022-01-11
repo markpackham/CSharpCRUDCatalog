@@ -20,7 +20,7 @@ namespace CSharpCRUDCatalog.Controllers
 
         // GET /items
         [HttpGet]
-        public IEnumerable<ItemDto> GetItems()
+        public async Task<IEnumerable<ItemDto>> GetItemsAsync()
         {
             var items = repository.GetItemsAsync().Select(item => item.AsDto());
             return items;

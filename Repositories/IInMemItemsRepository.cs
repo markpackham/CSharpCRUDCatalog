@@ -1,5 +1,4 @@
 ﻿using CSharpCRUDCatalog.Entities;
-using System.Threading.Tasks;
 
 namespace CSharpCRUDCatalog.Repositories
 {
