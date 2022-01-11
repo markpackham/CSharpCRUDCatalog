@@ -22,15 +22,16 @@ namespace CSharpCRUDCatalog.Controllers
         [HttpGet]
         public async Task<IEnumerable<ItemDto>> GetItemsAsync()
         {
-            var items = repository.GetItemsAsync().Select(item => item.AsDto());
+            var items = (await repository.GetItemsAsync())
+                .Select(item => item.AsDto());
             return items;
         }
 
         // GET /items/{id}
         [HttpGet("{id}")]
-        public ActionResult<ItemDto> GetItem(Guid id)
+        public async Task<ActionResult<ItemDto>> GetItemAsync(Guid id)
         {
-            var item = repository.GetItemAsync(id);
+            var item = await repository.GetItemAsync(id);
 
             if (item is null)
             {
@@ -42,7 +43,7 @@ namespace CSharpCRUDCatalog.Controllers
 
         // POST /items
         [HttpPost]
-        public ActionResult<ItemDto> CreateItem(CreateItemDto itemDto)
+        public async Task<ActionResult<ItemDto>> CreateItemAsync(CreateItemDto itemDto)
         {
             Item item = new()
             {
@@ -51,16 +52,16 @@ namespace CSharpCRUDCatalog.Controllers
                 Price = itemDto.Price,
             };
 
-            repository.CreateItemAsync(item);
+            await repository.CreateItemAsync(item);
 
-            return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item.AsDto());
+            return CreatedAtAction(nameof(GetItemAsync), new { id = item.Id }, item.AsDto());
         }
 
         // PUT /items/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
+        public async Task<ActionResult> UpdateItemAsync(Guid id, UpdateItemDto itemDto)
         {
-            var exsitingItem = repository.GetItemAsync(id);
+            var exsitingItem = await repository.GetItemAsync(id);
 
             if(exsitingItem is null)
             {
@@ -74,7 +75,7 @@ namespace CSharpCRUDCatalog.Controllers
                 Price = itemDto.Price,
             };
 
-            repository.UpdateItemAsync(updatedItem);
+            await repository.UpdateItemAsync(updatedItem);
 
             return NoContent();
         }
@@ -82,16 +83,16 @@ namespace CSharpCRUDCatalog.Controllers
 
         // DELETE /items/{id}
         [HttpDelete("{id}")]
-        public ActionResult DeleteItem(Guid id)
+        public async Task<ActionResult> DeleteItemAsync(Guid id)
         {
-            var exsitingItem = repository.GetItemAsync(id);
+            var exsitingItem = await repository.GetItemAsync(id);
 
             if (exsitingItem is null)
             {
                 return NotFound();
             }
 
-            repository.DeleteItemAsync(id);
+            await repository.DeleteItemAsync(id);
 
             return NoContent();
         }
