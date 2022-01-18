@@ -13,7 +13,12 @@ namespace CSharpCRUDCatalog.Controllers
     {
          private readonly IInMemItemsRepository repository;
 
-         public ItemsController(IInMemItemsRepository repository)
+        public ItemsController(IInMemItemsRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        public ItemsController(IInMemItemsRepository repository, ILogger<ItemsController> @object)
         {
              this.repository = repository;
          }
